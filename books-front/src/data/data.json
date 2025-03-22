@@ -1,0 +1,52 @@
+{
+    "featuredBooks": [
+      {
+        "id": 1,
+        "title": "El Aleph",
+        "author": "Jorge Luis Borges",
+        "cover": "/covers/el-aleph.jpg"
+      },
+      {
+        "id": 2,
+        "title": "Rayuela",
+        "author": "Julio Cortázar",
+        "cover": "/covers/rayuela.jpg"
+      }
+    ],
+    "upcomingEvents": [
+      {
+        "id": 1,
+        "title": "Conferencia sobre Literatura Argentina",
+        "date": "2025-04-15"
+      },
+      {
+        "id": 2,
+        "title": "Taller de Escritura Creativa",
+        "date": "2025-05-10"
+      }
+    ],
+    "services": [
+      {
+        "id": 1,
+        "name": "Préstamo de libros",
+        "description": "Servicio de préstamo de libros a domicilio."
+      },
+      {
+        "id": 2,
+        "name": "Consulta en sala",
+        "description": "Acceso a la consulta de libros en la sala de lectura."
+      }
+    ],
+    "news": [
+      {
+        "id": 1,
+        "title": "Nueva colección de libros antiguos",
+        "date": "2025-03-20"
+      },
+      {
+        "id": 2,
+        "title": "Exposición de manuscritos históricos",
+        "date": "2025-03-25"
+      }
+    ]
+  }
