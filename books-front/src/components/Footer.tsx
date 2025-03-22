@@ -82,11 +82,11 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">Suscríbete al boletín</h3>
             <p className="text-sm text-blue-100 mb-4">Recibe noticias y eventos de la Biblioteca Nacional</p>
             <div className="flex">
-              <input
-                type="email"
-                placeholder="Tu correo electrónico"
-                className="px-3 py-2 text-gray-800 rounded-l-md w-full focus:outline-none"
-              />
+            <input
+  type="email"
+  placeholder="Tu correo electrónico"
+  className="px-3 py-2 text-white rounded-l-md w-full focus:outline-none bg-transparent border border-blue-400"
+/>
               <button className="bg-blue-700 px-4 py-2 rounded-r-md hover:bg-blue-600 transition-colors">
                 Enviar
               </button>

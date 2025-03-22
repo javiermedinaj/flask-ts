@@ -4,13 +4,13 @@
         "id": 1,
         "title": "El Aleph",
         "author": "Jorge Luis Borges",
-        "cover": "/covers/el-aleph.jpg"
+        "cover": "https://images.cdn3.buscalibre.com/fit-in/360x360/ab/b1/abb1e18f6c89a6dd0f021a63514759a9.jpg"
       },
       {
         "id": 2,
-        "title": "Rayuela",
-        "author": "Julio Cortázar",
-        "cover": "/covers/rayuela.jpg"
+        "title": "The library of Babel",
+        "author": "Jorge Luis Borges",
+        "cover": "https://images.cdn2.buscalibre.com/fit-in/360x360/a6/a1/a6a1208378ee8fe6f68515fbc3ecad27.jpg"
       }
     ],
     "upcomingEvents": [

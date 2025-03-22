@@ -1,45 +1,99 @@
-import React from 'react';
-//import { Link } from 'react-router-dom';
-import { Search, Menu } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+//import { Search, Menu, X } from "lucide-react";
 
 const Navbar: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  //const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const menuItems = [
+    { name: "Inicio", url: "/" },
+    {
+      name: "Catálogo",
+      url: "/catalog",
+      submenu: [
+        { name: "Libros", url: "/catalog/books" },
+        { name: "Revistas", url: "/catalog/magazines" },
+        { name: "Manuscritos", url: "/catalog/manuscripts" },
+      ],
+    },
+    { name: "Servicios", url: "/services" },
+    { name: "Eventos", url: "/events" },
+    { name: "Sobre nosotros", url: "/about" },
+  ];
+
   return (
     <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 md:px-8 py-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <img
-              src="https://www.bn.gov.ar/web/logo-bn.svg"
-              alt="Logo Biblioteca Nacional"
-              width={60}
-              height={60}
-              className="h-12 w-auto"
-            />
-            <div className="hidden md:block">
-              <h1 className="text-xl font-bold text-blue-900">Biblioteca Nacional</h1>
-              <p className="text-sm text-gray-600">Mariano Moreno</p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex relative">
-              <input
-                type="text"
-                placeholder="Buscar en el sitio"
-                className="pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                <Search className="h-4 w-4" />
-              </button>
-            </div>
-            <button className="md:hidden text-blue-900">
-              <Search className="h-5 w-5" />
-            </button>
-            <button className="text-blue-900 p-1 rounded-md hover:bg-blue-100 transition-colors">
-              <Menu className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
+      <div className="mx-auto">
+           <nav className="bg-blue-800 text-white hidden md:block">
+          <ul className="flex">
+          <Link to="/" className="flex items-center px-2">
+          <img
+  src="https://www.bn.gov.ar/web/logo-bn.svg"
+  alt="Logo Biblioteca Nacional"
+  className="h-12 w-auto filter invert brightness-100"
+/>
+          </Link>
+            {menuItems.map((item) => (
+              <li key={item.name} className="group relative">
+                <Link
+                  to={item.url}
+                  className="block px-4 py-3 hover:bg-blue-700 transition-colors"
+                >
+                  {item.name}
+                </Link>
+                {item.submenu && (
+                  <div className="absolute hidden group-hover:block bg-white shadow-lg w-48 z-10">
+                    <ul className="py-2 text-gray-800 text-sm">
+                      {item.submenu.map((subitem) => (
+                        <li key={subitem.name}>
+                          <Link
+                            to={subitem.url}
+                            className="block px-4 py-2 hover:bg-gray-100"
+                          >
+                            {subitem.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+        {isMenuOpen && (
+          <nav className="md:hidden bg-white border-t mt-2">
+            <ul className="py-2">
+              {menuItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.url}
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                  {item.submenu && (
+                    <ul className="pl-8 border-l-2 border-gray-200 ml-4">
+                      {item.submenu.map((subitem) => (
+                        <li key={subitem.name}>
+                          <Link
+                            to={subitem.url}
+                            className="block px-4 py-2 text-sm hover:bg-gray-100"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subitem.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
     </header>
   );
