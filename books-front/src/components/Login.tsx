@@ -1,43 +1,58 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validación básica
+
     if (!email) {
-      setError('Por favor ingresa tu correo electrónico');
+      setError("Por favor ingresa tu correo electrónico");
       return;
     }
     if (!password) {
-      setError('Por favor ingresa tu contraseña');
+      setError("Por favor ingresa tu contraseña");
       return;
     }
-    
+
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
-      // Aquí iría la lógica real de autenticación
-      // Por ejemplo: const response = await api.login(email, password);
-      
-      // Simulando un delay de autenticación
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Si la autenticación es exitosa
-      localStorage.setItem('isLoggedIn', 'true');
-      navigate('/');
+      // api de flask
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Importante para conservar cookies de sesión
+        body: JSON.stringify({
+          username: email, // esta es la linea que determina si es email o username
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error al iniciar sesión");
+      }
+
+      localStorage.setItem("isLoggedIn", "true");
+      navigate("/dashboard");
     } catch (err) {
-      setError('Credenciales incorrectas. Por favor inténtelo nuevamente.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Credenciales incorrectas. Por favor inténtalo nuevamente."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +69,7 @@ const Login: React.FC = () => {
             Accede a tu cuenta para gestionar préstamos y reservas
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
@@ -65,24 +80,28 @@ const Login: React.FC = () => {
               </div>
             </div>
           )}
-          
+
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email" className="sr-only">Correo electrónico</label>
+              <label htmlFor="email" className="sr-only">
+                Correo electrónico
+              </label>
               <input
                 id="email"
                 name="email"
-                type="email"
-                autoComplete="email"
+                type="text" // EMAIL O Username todavia no se sabe
+                autoComplete="username"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Correo electrónico"
+                placeholder="Nombre de usuario"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="relative">
-              <label htmlFor="password" className="sr-only">Contraseña</label>
+              <label htmlFor="password" className="sr-only">
+                Contraseña
+              </label>
               <input
                 id="password"
                 name="password"
@@ -116,13 +135,19 @@ const Login: React.FC = () => {
                 type="checkbox"
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
+              <label
+                htmlFor="remember_me"
+                className="ml-2 block text-sm text-gray-900"
+              >
                 Recordarme
               </label>
             </div>
 
             <div className="text-sm">
-              <Link to="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
+              <Link
+                to="/forgot-password"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
@@ -140,11 +165,14 @@ const Login: React.FC = () => {
             </button>
           </div>
         </form>
-        
+
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
-            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link
+              to="/register"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
               Regístrate aquí
             </Link>
           </p>

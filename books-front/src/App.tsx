@@ -8,6 +8,7 @@ import UpcomingEvents from './components/UpcomingEvents';
 import News from './components/News';
 import Login from './components/Login';
 import Books from './components/Books';
+import Dashboard from './components/Dashboard';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path= "/books" element={<Books />} />
+          <Route path = "/dashboard" element={<Dashboard />} />
           <Route path='/' element={
             <>
               <Hero />
