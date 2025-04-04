@@ -1,8 +1,4 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Calendar, ChevronRight } from 'lucide-react';
-
-// Definimos la interfaz para los eventos
+import { Calendar, ChevronRight, ArrowRight } from 'lucide-react';
 interface Event {
   id: number;
   title: string;
@@ -13,7 +9,7 @@ interface Event {
 }
 
 const UpcomingEvents: React.FC = () => {
-  // Datos de eventos basados en el HTML proporcionado
+  // Datos de pruba
   const events: Event[] = [
     {
       id: 1,
@@ -41,65 +37,94 @@ const UpcomingEvents: React.FC = () => {
     }
   ];
 
-  // Función para obtener el color de fondo según el tipo de categoría
   const getCategoryColor = (type: Event['categoryType']) => {
     switch(type) {
       case 'exhibition':
-        return 'bg-blue-600';
+        return 'bg-blue-600/80 backdrop-blur-sm';
       case 'event':
-        return 'bg-green-600';
+        return 'bg-green-600/80 backdrop-blur-sm';
       case 'holiday':
-        return 'bg-red-600';
+        return 'bg-red-600/80 backdrop-blur-sm';
       default:
-        return 'bg-gray-600';
+        return 'bg-gray-600/80 backdrop-blur-sm';
     }
   };
 
   return (
-    <section className="mb-12 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Agenda Cultural</h2>
-        <a 
-          href="https://www.bn.gov.ar/agenda-cultural" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline flex items-center"
-        >
-          Ver agenda completa
-          <ChevronRight className="ml-1 h-4 w-4" />
-        </a>
-      </div>
+    <section className="py-16 bg-gradient-to-r from-stone-900 to-black text-white relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col items-center mb-12">
+          <div className="w-16 h-px bg-white/40 mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-serif italic">
+            Agenda <span className="underline font-semibold">Cultural</span>
+          </h2>
+          <p className="mt-4 text-center text-white/70 max-w-2xl mx-auto">
+            Descubre los eventos culturales que tenemos preparados para ti este mes.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {events.map((event) => (
+            <a 
+              key={event.id} 
+              href={event.url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="group overflow-hidden h-full flex flex-col bg-stone-800/30 backdrop-blur-sm rounded-lg transition-all duration-500 hover:bg-stone-800/50"
+            >
+              <div className="relative h-56 overflow-hidden">
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-500 z-10"></div>
+                
+                <div 
+                  className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${event.image})` }}
+                ></div>
+                
+                
+                <div className="absolute top-4 left-4 z-20">
+                  <span className={`inline-block text-xs px-3 py-1.5 rounded-full text-white tracking-wider ${getCategoryColor(event.categoryType)}`}>
+                    {event.category}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-6 flex-grow flex flex-col">
+                <h3 className="text-xl font-serif font-medium text-white group-hover:text-white/90 transition-colors line-clamp-2 mb-3">
+                  {event.title}
+                </h3>
+                
+                <div className="mt-auto pt-4 flex items-center justify-between">
+                  <span className="text-sm text-white/60 flex items-center">
+                    <Calendar className="h-4 w-4 mr-1.5" />
+                    Ver detalles
+                  </span>
+                  
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all duration-300">
+                    <ArrowRight className="h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+        
 
-      {/* Grid para las tarjetas de eventos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
+        <div className="flex justify-center mt-12">
           <a 
-            key={event.id} 
-            href={event.url} 
+            href="https://www.bn.gov.ar/agenda-cultural" 
             target="_blank" 
-            rel="noopener noreferrer" 
-            className="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col"
+            rel="noopener noreferrer"
+            className="bg-white text-black py-2 px-8 rounded-full text-sm tracking-wider flex items-center transition-all duration-300 hover:bg-gray-200"
           >
-            <div 
-              className="h-48 bg-center bg-cover bg-no-repeat transition-transform group-hover:scale-105"
-              style={{ backgroundImage: `url(${event.image})` }}
-            ></div>
-            <div className="p-4 flex-grow flex flex-col">
-              <div className="mb-2">
-                <span className={`inline-block text-xs px-2 py-1 rounded text-white ${getCategoryColor(event.categoryType)}`}>
-                  {event.category}
-                </span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
-                {event.title}
-              </h3>
-              <div className="mt-auto pt-3 flex items-center text-sm text-gray-500">
-                <Calendar className="h-4 w-4 mr-1" />
-                <span>Ver detalles</span>
-              </div>
-            </div>
+            VER AGENDA COMPLETA
+            <ChevronRight className="ml-1 h-4 w-4" />
           </a>
-        ))}
+        </div>
+      </div>
+      
+      <div className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 -rotate-90 origin-center text-white/50 tracking-widest text-xs uppercase">
+        Eventos Culturales
       </div>
     </section>
   );

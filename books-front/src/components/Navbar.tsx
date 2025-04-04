@@ -1,102 +1,101 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-//import { Search, Menu, X } from "lucide-react";
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  //const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const menuItems = [
-    { name: "Inicio", url: "/" },
-    {
-      name: "Catálogo",
-      url: "/catalog",
-      submenu: [
-        { name: "Libros", url: "/catalog/books" },
-        { name: "Revistas", url: "/catalog/magazines" },
-        { name: "Manuscritos", url: "/catalog/manuscripts" },
-      ],
-    },
-    { name: "Servicios", url: "/services" },
-    { name: "Eventos", url: "/events" },
-    { name: "Sobre nosotros", url: "/about" },
+  // Detectar scroll para cambiar la apariencia
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Evitar scroll cuando el menú está abierto
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMenuOpen]);
+
+  // Datos de los enlaces de navegación
+  const navLinks = [
+    { to: "/orchid", label: "About" },
+    { to: "/login", label: "Login" },
   ];
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="mx-auto">
-           <nav className="bg-blue-800 text-white hidden md:block">
-          <ul className="flex">
-          <Link to="/" className="flex items-center px-2">
-          <img
-  src="https://www.bn.gov.ar/web/logo-bn.svg"
-  alt="Logo Biblioteca Nacional"
-  className="h-12 w-auto filter invert brightness-100"
-/>
-          </Link>
-            {menuItems.map((item) => (
-              <li key={item.name} className="group relative">
-                <Link
-                  to={item.url}
-                  className="block px-4 py-3 hover:bg-blue-700 transition-colors"
-                >
-                  {item.name}
-                </Link>
-                {item.submenu && (
-                  <div className="absolute hidden group-hover:block bg-white shadow-lg w-48 z-10">
-                    <ul className="py-2 text-gray-800 text-sm">
-                      {item.submenu.map((subitem) => (
-                        <li key={subitem.name}>
-                          <Link
-                            to={subitem.url}
-                            className="block px-4 py-2 hover:bg-gray-100"
-                          >
-                            {subitem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-        {isMenuOpen && (
-          <nav className="md:hidden bg-white border-t mt-2">
-            <ul className="py-2">
-              {menuItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.url}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                  {item.submenu && (
-                    <ul className="pl-8 border-l-2 border-gray-200 ml-4">
-                      {item.submenu.map((subitem) => (
-                        <li key={subitem.name}>
-                          <Link
-                            to={subitem.url}
-                            className="block px-4 py-2 text-sm hover:bg-gray-100"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {subitem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-      </div>
-    </header>
-  );
-};
+    <nav
+  className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4 
+  ${isScrolled || isMenuOpen ? "bg-black" : "bg-black/30"} 
+   transition-all duration-300`}
+>
 
-export default Navbar;
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <div className="text-lg font-medium z-20">
+          <Link to="/" className="text-white tracking-wider">
+            Telepathic
+          </Link>
+        </div>
+
+        {/* Botón de menú móvil */}
+        <button
+          className="z-20 relative md:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <div className="flex flex-col justify-center w-8 h-8 space-y-1.5">
+            <span
+              className={`block h-0.5 w-8 bg-white transition-transform duration-300 
+              ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}
+            ></span>
+            <span
+              className={`block h-0.5 bg-white transition-opacity duration-300 
+              ${isMenuOpen ? "opacity-0 w-0" : "opacity-100 w-5"}`}
+            ></span>
+            <span
+              className={`block h-0.5 w-8 bg-white transition-transform duration-300 
+              ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+            ></span>
+          </div>
+        </button>
+
+        {/* Enlaces de navegación para escritorio */}
+        <div className="hidden md:flex gap-8 items-center">
+          {navLinks.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className="text-white text-sm tracking-wider hover:opacity-80 transition-opacity duration-200"
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Menú móvil con transición */}
+        <div
+          className={`fixed inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-start pt-24
+          transition-all duration-500 ease-in-out md:hidden
+          ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        >
+          {navLinks.map(({ to, label }, index) => (
+            <Link
+              key={to}
+              to={to}
+              className={`text-white text-xl mb-10 tracking-wider hover:text-green-400 transition-all duration-500 
+              ${isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}
+              style={{ transitionDelay: isMenuOpen ? `${200 + index * 100}ms` : "0ms" }}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
