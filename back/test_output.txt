@@ -1,0 +1,174 @@
+ pytest test_app.py -v
+=========================== test session starts ===========================
+platform linux -- Python 3.13.2, pytest-7.4.0, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/javimedina/Desktop/python-flask/back
+collected 7 items                                                         
+
+test_app.py::test_get_books_api FAILED                              [ 14%]
+test_app.py::test_add_book_api FAILED                               [ 28%]
+test_app.py::test_get_book_api FAILED                               [ 42%]
+test_app.py::test_update_book_api FAILED                            [ 57%]
+test_app.py::test_delete_book_api FAILED                            [ 71%]
+test_app.py::test_index_page FAILED                                 [ 85%]
+test_app.py::test_new_book_page FAILED                              [100%]
+
+================================ FAILURES =================================
+___________________________ test_get_books_api ____________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_get_books_api(client):
+        response = client.get("/api/books")
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+
+test_app.py:17: AssertionError
+____________________________ test_add_book_api ____________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_add_book_api(client):
+        new_book = {
+            "title": "Test Book",
+            "author": "Test Author",
+            "year": 2025
+        }
+        response = client.post("/api/books", json=new_book)
+>       assert response.status_code == 201
+E       assert 404 == 201
+E        +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+
+test_app.py:28: AssertionError
+____________________________ test_get_book_api ____________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_get_book_api(client):
+        new_book = {"title": "Book For Get", "author": "Author", "year": 2022}
+        post_response = client.post("/api/books", json=new_book)
+        created_book = post_response.get_json()
+    
+>       response = client.get(f"/api/books/{created_book['id']}")
+E       TypeError: 'NoneType' object is not subscriptable
+
+test_app.py:39: TypeError
+__________________________ test_update_book_api ___________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_update_book_api(client):
+        new_book = {"title": "Old Title", "author": "Old Author", "year": 2000}
+        post_response = client.post("/api/books", json=new_book)
+        book = post_response.get_json()
+    
+        updated_data = {"title": "New Title", "author": "New Author", "year": 2020}
+>       put_response = client.put(f"/api/books/{book['id']}", json=updated_data)
+E       TypeError: 'NoneType' object is not subscriptable
+
+test_app.py:50: TypeError
+__________________________ test_delete_book_api ___________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_delete_book_api(client):
+        new_book = {"title": "To be deleted", "author": "Author", "year": 1999}
+        post_response = client.post("/api/books", json=new_book)
+        book = post_response.get_json()
+    
+>       delete_response = client.delete(f"/api/books/{book['id']}")
+E       TypeError: 'NoneType' object is not subscriptable
+
+test_app.py:62: TypeError
+_____________________________ test_index_page _____________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_index_page(client):
+        response = client.get("/")
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+
+test_app.py:69: AssertionError
+___________________________ test_new_book_page ____________________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_new_book_page(client):
+        response = client.get("/books/new")
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+
+test_app.py:74: AssertionError
+========================= short test summary info =========================
+FAILED test_app.py::test_get_books_api - assert 404 == 200
+FAILED test_app.py::test_add_book_api - assert 404 == 201
+FAILED test_app.py::test_get_book_api - TypeError: 'NoneType' object is not subscriptable
+FAILED test_app.py::test_update_book_api - TypeError: 'NoneType' object is not subscriptable
+FAILED test_app.py::test_delete_book_api - TypeError: 'NoneType' object is not subscriptable
+FAILED test_app.py::test_index_page - assert 404 == 200
+FAILED test_app.py::test_new_book_page - assert 404 == 200
+============================ 7 failed in 0.43s ============================
+
+second output
+pytest test_app.py -v
+=========================== test session starts ===========================
+platform linux -- Python 3.13.2, pytest-7.4.0, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/javimedina/Desktop/python-flask/back
+collected 7 items                                                         
+
+test_app.py::test_check_session_when_not_logged_in PASSED           [ 14%]
+test_app.py::test_successful_login PASSED                           [ 28%]
+test_app.py::test_failed_login PASSED                               [ 42%]
+test_app.py::test_check_session_when_logged_in PASSED               [ 57%]
+test_app.py::test_logout PASSED                                     [ 71%]
+test_app.py::test_upload_book_without_login FAILED                  [ 85%]
+test_app.py::test_upload_book_with_login PASSED                     [100%]
+
+================================ FAILURES =================================
+_____________________ test_upload_book_without_login ______________________
+
+client = <FlaskClient <Flask 'app'>>
+
+    def test_upload_book_without_login(client):
+        # Try to upload a book without logging in
+        data = {
+            'titulo': 'Test Book',
+            'autor': 'Test Author',
+            'descripcion': 'Test Description',
+            'categoria': 'Test Category'
+        }
+        file = (io.BytesIO(b"test content"), 'test.pdf')
+        response = client.post('/upload-book', data={**data, 'archivo': file})
+>       assert response.status_code == 401  # Unauthorized, user not authenticated
+E       assert 302 == 401
+E        +  where 302 = <WrapperTestResponse streamed [302 FOUND]>.status_code
+
+test_app.py:85: AssertionError
+========================= short test summary info =========================
+FAILED test_app.py::test_upload_book_without_login - assert 302 == 401
+======================= 1 failed, 6 passed in 4.64s =======================
+
+
+
+tercer output 
+ test_app.py -v
+=========================== test session starts ===========================
+platform linux -- Python 3.13.2, pytest-7.4.0, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/javimedina/Desktop/python-flask/back
+collected 7 items                                                         
+
+test_app.py::test_check_session_when_not_logged_in PASSED           [ 14%]
+test_app.py::test_successful_login PASSED                           [ 28%]
+test_app.py::test_failed_login PASSED                               [ 42%]
+test_app.py::test_check_session_when_logged_in PASSED               [ 57%]
+test_app.py::test_logout PASSED                                     [ 71%]
+test_app.py::test_upload_book_without_login PASSED                  [ 85%]
+test_app.py::test_upload_book_with_login PASSED                     [100%]
+
+============================ 7 passed in 4.48s ============================
